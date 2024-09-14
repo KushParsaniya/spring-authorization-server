@@ -1,7 +1,6 @@
 package dev.kush.authorizationserver.repos.clients;
 
 import dev.kush.authorizationserver.models.clients.entities.Client;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

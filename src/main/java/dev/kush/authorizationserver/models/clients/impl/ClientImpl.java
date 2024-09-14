@@ -1,22 +1,39 @@
 package dev.kush.authorizationserver.models.clients.impl;
 
 import dev.kush.authorizationserver.models.clients.entities.Client;
-import dev.kush.authorizationserver.utils.MapperUtils;
-import lombok.AllArgsConstructor;
+import dev.kush.authorizationserver.utils.MapperUtilsNew;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+
+@Component
+@Getter
+@Setter
 public class ClientImpl extends RegisteredClient {
 
     private Client client;
+
+    private MapperUtilsNew mapperUtilsNew;
+
+    @Autowired
+    public ClientImpl(MapperUtilsNew mapperUtilsNew) {
+        this.mapperUtilsNew = mapperUtilsNew;
+    }
+
+    public ClientImpl(Client client) {
+        this.client = client;
+    }
 
     @Override
     public String getId() {
@@ -52,7 +69,7 @@ public class ClientImpl extends RegisteredClient {
     public Set<ClientAuthenticationMethod> getClientAuthenticationMethods() {
         return client.getClientAuthMethods()
                 .stream()
-                .map(MapperUtils::mapClientAuthMethod)
+                .map(mapperUtilsNew::mapClientAuthMethod)
                 .collect(Collectors.toSet());
     }
 
@@ -60,14 +77,14 @@ public class ClientImpl extends RegisteredClient {
     public Set<AuthorizationGrantType> getAuthorizationGrantTypes() {
         return client.getGrantTypes()
                 .stream()
-                .map(MapperUtils::mapGrantType)
+                .map(mapperUtilsNew::mapGrantType)
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Set<String> getRedirectUris() {
         return client.getRedirectUris().stream()
-                .map(MapperUtils::mapRedirectUri)
+                .map(mapperUtilsNew::mapRedirectUri)
                 .collect(Collectors.toSet());
     }
 
@@ -79,17 +96,17 @@ public class ClientImpl extends RegisteredClient {
     @Override
     public Set<String> getScopes() {
         return client.getScopes().stream()
-                .map(MapperUtils::mapScope)
+                .map(mapperUtilsNew::mapScope)
                 .collect(Collectors.toSet());
     }
 
     @Override
     public ClientSettings getClientSettings() {
-        return MapperUtils.mapClientSettings(client.getClientSetting());
+        return mapperUtilsNew.mapClientSettings(client.getClientSetting());
     }
 
     @Override
     public TokenSettings getTokenSettings() {
-        return MapperUtils.mapTokenSettings(client.getTokenSetting());
+        return mapperUtilsNew.mapTokenSettings(client.getTokenSetting());
     }
 }

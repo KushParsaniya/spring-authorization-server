@@ -2,28 +2,26 @@ package dev.kush.authorizationserver.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class UserManagementConfig {
 
     @Bean
-    UserDetailsManager userDetailsManager() {
-        UserDetails u1 = User.withDefaultPasswordEncoder()
-                .username("kush")
-                .password("1234")
-                .authorities("SCOPE_read")
-                .build();
-
-        UserDetails u2 = User.withDefaultPasswordEncoder()
-                .username("abhi")
-                .password("1234")
-                .authorities("SCOPE_write","SCOPE_read")
-                .build();
-
-        return new InMemoryUserDetailsManager(u1,u2);
+    PasswordEncoder passwordEncoder() {
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("bcrypt", new BCryptPasswordEncoder());
+        encoders.put("noop", NoOpPasswordEncoder.getInstance());
+        encoders.put("scrypt", new SCryptPasswordEncoder(16, 8, 1, 524, 12));
+        encoders.put("sha256", new StandardPasswordEncoder());
+        return new DelegatingPasswordEncoder("noop", encoders);
     }
 }

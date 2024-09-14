@@ -2,21 +2,22 @@ package dev.kush.authorizationserver.service.impl;
 
 import dev.kush.authorizationserver.models.clients.impl.ClientImpl;
 import dev.kush.authorizationserver.repos.clients.ClientRepository;
-import dev.kush.authorizationserver.service.ClientService;
-import dev.kush.authorizationserver.utils.MapperUtils;
+import dev.kush.authorizationserver.service.SecuredClientService;
+import dev.kush.authorizationserver.utils.MapperUtilsNew;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ClientServiceImpl implements ClientService {
+public class SecuredClientServiceImpl implements SecuredClientService {
 
     private final ClientRepository clientRepository;
+    private final MapperUtilsNew mapperUtilsNew;
 
     @Override
     public void save(RegisteredClient registeredClient) {
-        clientRepository.save(MapperUtils.mapClient(registeredClient));
+        clientRepository.save(mapperUtilsNew.mapClient(registeredClient));
     }
 
     @Override

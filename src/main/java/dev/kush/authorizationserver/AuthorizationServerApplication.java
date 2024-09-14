@@ -13,7 +13,6 @@ import dev.kush.authorizationserver.repos.clients.ClientRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Set;
 
@@ -24,7 +23,7 @@ public class AuthorizationServerApplication {
         SpringApplication.run(AuthorizationServerApplication.class, args);
     }
 
-//        @Bean
+    //        @Bean
     ApplicationRunner applicationRunner(ClientRepository clientRepository) {
         return args -> {
 
